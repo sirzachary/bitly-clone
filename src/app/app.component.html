@@ -1,21 +1,74 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+<div nz-row nzType="flex" nzJustify="center">
+  <div nz-col [nzXs]="24" [nzLg]="16">
+    <div class="m-3">
+      <h1 style="margin-top: 0.5em;">Bitly<span style="color: rgba(82, 196, 26, 0.5);">.</span></h1>
+      <form
+        [formGroup]="shortenerForm"
+        novalidate
+        (ngSubmit)="shorten(shortenerForm)"
+      >
+        <div style="display: flex;">
+          <input
+            style="flex: 2;"
+            type="text"
+            formControlName="long"
+            nz-input
+            [nzSize]="large"
+            placeholder="Shorten your link"
+          />
+          <input
+            style="flex: 1; margin: 0px 10px;"
+            type="text"
+            formControlName="custom"
+            nz-input
+            [nzSize]="large"
+            placeholder="Customize your link (Optional)"
+          />
+          <button
+            [disabled]="shortenerForm.invalid"
+            nz-button
+            type="submit"
+            nzType="primary"
+            nzSearch
+          >
+            Shorten
+          </button>
+        </div>
+      </form>
+      <nz-collapse [nzBordered]="false" style="margin: 10px 0px;">
+        <nz-collapse-panel
+          class="new-link"
+          *ngFor="let link of history"
+          [class.new]="!link.clicked"
+          [nzHeader]="customHeader"
+          [nzActive]="link.active"
+          [nzShowArrow]="false"
+        >
+          <ng-template #customHeader>
+            <div style="display: flex; align-items: center; flex-wrap: wrap;">
+              <span
+                style="flex: 3; max-width: 100%; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"
+                >{{ link.long }}</span
+              >
+              <span>
+                <button
+                  nz-button
+                  class="m-3"
+                  nzType="default"
+                  (click)="copyToClipboard(link.short); $event.stopPropagation()"
+                >
+                  Copy Short Link
+                </button>
+                <button nz-button nzType="default" (click)="getStats(link.id)">
+                  Stats
+                </button>
+              </span>
+            </div>
+          </ng-template>
+          <span>{{ link.visits.length }} Visits</span>
+        </nz-collapse-panel>
+      </nz-collapse>
+    </div>
+  </div>
 </div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
-
-<router-outlet></router-outlet>
+<!-- {{ history | json }} -->
